@@ -5,10 +5,8 @@
  */
 public class Produto {
 	private String desc;
-	private double custo_compra;
-	private double valor_venda;
-	private int total_vendas;
-	private int total_compra;
+	private double custo_compra, valor_venda;
+	private int total_vendas, total_compra;
 
 	/**
 	 * Construtor da classe Produto, inicializa os atributos e verifica se os
@@ -28,6 +26,13 @@ public class Produto {
 		this.custo_compra = custo;
 		this.valor_venda = custo * 1.18 * lucro / 100;
 		this.total_vendas = this.total_compra = 0;
+	}
+
+	/**
+	 * @return descricao do produto
+	 */
+	String get_desc() {
+		return this.desc;
 	}
 
 	/**
@@ -66,44 +71,8 @@ public class Produto {
 	 */
 	void print_produto() {
 		System.out.format(
-				"\n Nome: %s\n  Vendas: %d\n  Valor de venda: %.2f\n  Compras: %d\n  Custo: %.2f\n  Total em estoque: %d",
+				"\n Nome: %s\n  Vendas: %d\n  Valor de venda: %.2f\n  Compras: %d\n  Custo: %.2f\n  Total em estoque: %d\n  Arrecadamento: %.2f",
 				this.desc, this.total_vendas, this.valor_venda, this.total_compra, this.custo_compra,
-				this.total_compra - this.total_vendas);
-	}
-
-	// setters
-
-	/**
-	 * Altera o preco de venda do produto
-	 * 
-	 * @param valor_venda novo preco de venda
-	 */
-	void setPreco(double valor_venda) {
-		this.valor_venda = valor_venda;
-	}
-
-	/**
-	 * Altera a descricao do produto
-	 * 
-	 * @param desc nova descricao
-	 */
-	void setDesc(String desc) {
-		this.desc = desc;
-	}
-
-	// getters
-
-	/**
-	 * @return descricao do produto
-	 */
-	String getDesc() {
-		return this.desc;
-	}
-
-	/**
-	 * @return custo de compra
-	 */
-	double getCusto() {
-		return this.custo_compra;
+				this.total_compra - this.total_vendas, this.total_vendas * this.valor_venda);
 	}
 }

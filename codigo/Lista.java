@@ -10,41 +10,43 @@ public class Lista {
 	 * Construtor da classe que cria uma lista com o topo como sentinela
 	 */
 	Lista() {
-		this.topo = new Celula(null,null);
-	}
-
-	// metodos privados
-
-	/**
-	 * Verifica se o lucro esta entre 30 e 80, usado em
-	 * {@link #alterar_preco(String, double)} e
-	 * {@link #alterar_custo(String, double, double)}
-	 *
-	 * @param in lucro
-	 * @return lucro
-	 * @throws Exception caso o lucro seja invalido
-	 */
-	private double verifica_lucro(double in) throws Exception {
-		if (in < 30 || in > 80)
-			throw new Exception("\n Margem de lucro invalida, apenas entre 30 e 80");
-		return in;
+		this.topo = new Celula(null, null);
 	}
 
 	/**
 	 * Retorna a referencia para uma celula, usado em
-	 * {@link #get_referencia_produto(String)}
+	 * {@link #get_referencia_produto(String)} e {@link #inserir(Produto)}
 	 *
 	 * @param in nome do produto
 	 * @return referencia para a celula ou null caso nao seja encontrada
 	 */
 	private Celula get_referencia_cel(String in) {
 		Celula out = this.topo.anterior;
-		while (out != null && !out.item.getDesc().equalsIgnoreCase(in))
+		while (out != null && !out.item.get_desc().equalsIgnoreCase(in))
 			out = out.anterior;
 		return out;
 	}
 
-	// fim dos metodos privados
+	/**
+	 * Incrementa o total de vendas do produto
+	 *
+	 * @param in nome do produto
+	 * @throws Exception caso o produto nao seja encontrado
+	 */
+	void baixa(String in, int vendido) throws Exception {
+		get_referencia_produto(in).baixa(vendido);
+	}
+
+	/**
+	 * Incrementa o total de compras do produto
+	 *
+	 * @param in       nome do produto
+	 * @param comprado quantidade comprada
+	 * @throws Exception caso o produto nao seja encontrado
+	 */
+	void compra(String in, int comprado) throws Exception {
+		get_referencia_produto(in).compra(comprado);
+	}
 
 	/**
 	 * @param in nome do produto
@@ -65,74 +67,9 @@ public class Lista {
 	 * @throws Exception caso o produto ja exista
 	 */
 	void inserir(Produto novo_item) throws Exception {
-		if (get_referencia_cel(novo_item.getDesc()) != null)
+		if (get_referencia_cel(novo_item.get_desc()) != null)
 			throw new Exception("\n Erro, produto ja existente");
 		this.topo.anterior = new Celula(novo_item, this.topo.anterior);
-	}
-
-	/**
-	 * Altera o custo de venda do produto
-	 *
-	 * @param in         nome do produto
-	 * @param novo_lucro novo lucro
-	 * @throws Exception caso o produto nao seja encontrado ou o novo lucro seja
-	 *                   invalido
-	 */
-	void alterar_preco(String in, double novo_lucro) throws Exception {
-		Produto ref = get_referencia_produto(in);
-		ref.setPreco(ref.getCusto() * 1.18 * verifica_lucro(novo_lucro) / 100);
-	}
-
-	/**
-	 * Altera o custo de compra do produto
-	 *
-	 * @param in         nome do produto
-	 * @param novo_custo novo custo de compra
-	 * @param novo_lucro novo lucro
-	 * @throws Exception caso o produto nao seja encontrado ou o novo lucro seja
-	 *                   invalido
-	 */
-	void alterar_custo(String in, double novo_custo, double novo_lucro) throws Exception {
-		get_referencia_produto(in).setPreco(novo_custo * 1.18 * verifica_lucro(novo_lucro) / 100);
-	}
-
-	/**
-	 * Altera a descricao do produto
-	 *
-	 * @param in       nome do produto
-	 * @param novaDesc nova descricao
-	 * @throws Exception caso o produto nao seja encontrado ou o novo nome seja
-	 *                   invalido
-	 */
-	void alterar_descricao(String in, String nova_desc) throws Exception {
-		if (nova_desc.length() < 3)
-			throw new Exception("\n Nome invalido, menor que 3 caracteres");
-		get_referencia_produto(in).setDesc(nova_desc);
-	}
-
-	/**
-	 * Incrementa o total de vendas do produto
-	 *
-	 * @param in nome do produto
-	 * @throws Exception caso o produto nao seja encontrado
-	 */
-	void baixa(String in, int vendido) throws Exception {
-		try {
-			get_referencia_produto(in).baixa(vendido);
-		} catch (Exception e) {
-			throw new Exception("\n Erro, nao ha " + in + " o suficiente");
-		}
-	}
-
-	/**
-	 * Incrementa o total de compras do produto
-	 *
-	 * @param in       nome do produto
-	 * @param comprado quantidade comprada
-	 * @throws Exception caso o produto nao seja encontrado
-	 */
-	void compra(String in, int comprado) throws Exception {
-		get_referencia_produto(in).compra(comprado);
 	}
 
 	/**
