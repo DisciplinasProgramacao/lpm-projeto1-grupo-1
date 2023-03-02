@@ -3,7 +3,7 @@
  *
  * @author Henrique Almeida
  */
-public class Lista {
+class Lista {
 	private Celula topo;
 
 	/**
@@ -91,10 +91,57 @@ public class Lista {
 
 	/**
 	 * Printa as informacoes de todos os produtos
-	 *
 	 */
 	void listar_geral() {
 		for (Celula tmp = this.topo.anterior; tmp != null; tmp = tmp.anterior)
 			tmp.item.print_produto();
+	}
+
+	/**
+	 * Printa as informacoes de todos os produtos com quantidade menor que o minimo
+	 * estabelecido
+	 */
+	void listar_nminimo() {
+		for (Celula tmp = this.topo.anterior; tmp != null; tmp = tmp.anterior)
+			if (!tmp.item.suficiente(Sistema.estoque_minimo))
+				tmp.item.print_produto();
+	}
+
+	/**
+	 * @return quantidade de produtos na lista
+	 */
+	int total() {
+		int out = 0;
+		for (Celula tmp = this.topo.anterior; tmp != null; tmp = tmp.anterior)
+			out++;
+		return out;
+	}
+
+	/**
+	 * @return valor total dos produtos na lista
+	 */
+	double valor_total() {
+		double out = 0;
+		for (Celula tmp = this.topo.anterior; tmp != null; tmp = tmp.anterior)
+			out += tmp.item.get_valor_estocado();
+		return out;
+	}
+
+	/**
+	 * Remove um produto da lista
+	 *
+	 * @param nome nome do produto
+	 * @return nome do produto removido
+	 * @throws Exception caso o produto nao seja encontrado
+	 */
+	String remover(String nome) throws Exception {
+		Celula tmp = this.topo; // tmp comeca no topo
+		while (tmp.anterior != null && !tmp.anterior.item.get_desc().equalsIgnoreCase(nome)) // para quando achar o
+																								// produto
+			tmp = tmp.anterior; // procura o produto
+		if (tmp.anterior == null) // se nao for encontrado
+			throw new Exception("\n Erro, produto nao encontrado");
+		tmp.anterior = tmp.anterior.anterior; // remove o produto
+		return nome;
 	}
 }
