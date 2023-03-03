@@ -3,7 +3,7 @@
  *
  * @author JPPauletti
  */
-public class Produto {
+class Produto {
 	private String desc;
 	private double custo_compra, valor_venda;
 	private int total_vendas, total_compra;
@@ -24,7 +24,7 @@ public class Produto {
 			throw new Exception("\n Margem de lucro invalida, apenas entre 30 e 80");
 		this.desc = desc;
 		this.custo_compra = custo;
-		this.valor_venda = custo * 1.18 * lucro / 100;
+		this.valor_venda = custo * (1 + lucro / 100) * 1.18; // 18% de imposto sobre o custo + lucro
 		this.total_vendas = this.total_compra = 0;
 	}
 
@@ -33,6 +33,13 @@ public class Produto {
 	 */
 	String get_desc() {
 		return this.desc;
+	}
+
+	/**
+	 * @return valor de venda do produto
+	 */
+	double get_valor_estocado() {
+		return (this.total_compra - this.total_vendas) * this.valor_venda;
 	}
 
 	/**
@@ -71,8 +78,12 @@ public class Produto {
 	 */
 	void print_produto() {
 		System.out.format(
-				"\n Nome: %s\n  Vendas: %d\n  Valor de venda: %.2f\n  Compras: %d\n  Custo: %.2f\n  Total em estoque: %d\n  Arrecadamento: %.2f",
+				"\n Nome: %s\n  Vendas: %d\n  Valor de venda: %.2f\n  Compras: %d\n  Custo: %.2f\n  Total em estoque: %d\n  Arrecadamento: %.2f\n  Valor do estoque: %.2f\n  Estoque minimo? %s",
 				this.desc, this.total_vendas, this.valor_venda, this.total_compra, this.custo_compra,
-				this.total_compra - this.total_vendas, this.total_vendas * this.valor_venda);
+				this.total_compra - this.total_vendas, // total em estoque
+				this.total_vendas * this.valor_venda, // arrecadamento
+				(this.total_compra - this.total_vendas) * this.valor_venda, // valor do estoque
+				suficiente(Sistema.estoque_minimo) ? "Sim" : "Nao" // estoque minimo
+		);
 	}
 }
