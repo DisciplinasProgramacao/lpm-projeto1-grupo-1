@@ -1,3 +1,5 @@
+import java.util.NoSuchElementException;
+
 /**
  * Classe que representa uma lista de produtos
  *
@@ -15,12 +17,12 @@ class Lista {
 
 	/**
 	 * Retorna a referencia para uma celula, usado em
-	 * {@link #get_referencia_produto(String)} e {@link #inserir(Produto)}
+	 * {@link #get_produto(String)} e {@link #inserir(Produto)}
 	 *
 	 * @param in nome do produto
 	 * @return referencia para a celula ou null caso nao seja encontrada
 	 */
-	private Celula get_referencia_cel(String in) {
+	private Celula get_cel(String in) {
 		Celula out = this.topo.anterior;
 		while (out != null && !out.item.get_desc().equalsIgnoreCase(in))
 			out = out.anterior;
@@ -31,10 +33,11 @@ class Lista {
 	 * Incrementa o total de vendas do produto
 	 *
 	 * @param in nome do produto
-	 * @throws Exception caso o produto nao seja encontrado
+	 * @throws NoSuchElementException caso o produto nao seja encontrado
+	 * @throws IllegalStateException  caso nao haja produtos o suficiente
 	 */
-	void baixa(String in, int vendido) throws Exception {
-		get_referencia_produto(in).baixa(vendido);
+	void baixa(String in, int vendido) throws NoSuchElementException, IllegalStateException {
+		get_produto(in).baixa(vendido);
 	}
 
 	/**
@@ -42,21 +45,21 @@ class Lista {
 	 *
 	 * @param in       nome do produto
 	 * @param comprado quantidade comprada
-	 * @throws Exception caso o produto nao seja encontrado
+	 * @throws NoSuchElementException caso o produto nao seja encontrado
 	 */
-	void compra(String in, int comprado) throws Exception {
-		get_referencia_produto(in).compra(comprado);
+	void compra(String in, int comprado) throws NoSuchElementException {
+		get_produto(in).compra(comprado);
 	}
 
 	/**
 	 * @param in nome do produto
 	 * @return Referencia para o produto
-	 * @throws Exception caso o produto nao seja encontrado
+	 * @throws NoSuchElementException caso o produto nao seja encontrado
 	 */
-	Produto get_referencia_produto(String in) throws Exception {
-		Celula out = get_referencia_cel(in);
+	Produto get_produto(String in) throws NoSuchElementException {
+		Celula out = get_cel(in);
 		if (out == null)
-			throw new Exception("\n Erro, produto nao encontrado");
+			throw new NoSuchElementException("\n Erro, produto nao encontrado");
 		return out.item;
 	}
 
@@ -64,11 +67,11 @@ class Lista {
 	 * Insere um novo produto na lista
 	 *
 	 * @param novo_item nome do novo produto
-	 * @throws Exception caso o produto ja exista
+	 * @throws IllegalArgumentException caso o produto ja exista
 	 */
-	void inserir(Produto novo_item) throws Exception {
-		if (get_referencia_cel(novo_item.get_desc()) != null)
-			throw new Exception("\n Erro, produto ja existente");
+	void inserir(Produto novo_item) throws IllegalArgumentException {
+		if (get_cel(novo_item.get_desc()) != null)
+			throw new IllegalArgumentException("\n Erro, produto ja existente");
 		this.topo.anterior = new Celula(novo_item, this.topo.anterior);
 	}
 
@@ -83,10 +86,10 @@ class Lista {
 	 * Printa as informacoes do produto
 	 *
 	 * @param in nome do produto
-	 * @throws Exception caso o produto nao seja encontrado
+	 * @throws NoSuchElementException caso o produto nao seja encontrado
 	 */
-	void listar(String in) throws Exception {
-		get_referencia_produto(in).print_produto();
+	void listar_produto(String in) throws NoSuchElementException {
+		get_produto(in).print_produto();
 	}
 
 	/**
@@ -132,15 +135,14 @@ class Lista {
 	 *
 	 * @param nome nome do produto
 	 * @return nome do produto removido
-	 * @throws Exception caso o produto nao seja encontrado
+	 * @throws NoSuchElementException caso o produto nao seja encontrado
 	 */
-	String remover(String nome) throws Exception {
+	String remover(String nome) throws NoSuchElementException {
 		Celula tmp = this.topo; // tmp comeca no topo
-		while (tmp.anterior != null && !tmp.anterior.item.get_desc().equalsIgnoreCase(nome)) // para quando achar o
-																								// produto
+		while (tmp.anterior != null && !tmp.anterior.item.get_desc().equalsIgnoreCase(nome)) // ao achar o produto
 			tmp = tmp.anterior; // procura o produto
 		if (tmp.anterior == null) // se nao for encontrado
-			throw new Exception("\n Erro, produto nao encontrado");
+			throw new NoSuchElementException("\n Erro, produto nao encontrado");
 		tmp.anterior = tmp.anterior.anterior; // remove o produto
 		return nome;
 	}

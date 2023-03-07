@@ -15,13 +15,13 @@ class Produto {
 	 * @param desc  descricao do produto
 	 * @param custo custo de compra do produto
 	 * @param lucro margem de lucro do produto
-	 * @throws Exception caso os valores sejam invalidos
+	 * @throws IllegalArgumentException caso os valores sejam invalidos
 	 */
-	Produto(String desc, double custo, double lucro) throws Exception {
+	Produto(String desc, double custo, double lucro) throws IllegalArgumentException {
 		if (desc.length() < 3)
-			throw new Exception("\n Nome invalido, menor que 3 caracteres");
+			throw new IllegalArgumentException("\n Nome invalido, menor que 3 caracteres");
 		if (lucro < 30 || lucro > 80)
-			throw new Exception("\n Margem de lucro invalida, apenas entre 30 e 80");
+			throw new IllegalArgumentException("\n Margem de lucro invalida, apenas entre 30 e 80");
 		this.desc = desc;
 		this.custo_compra = custo;
 		this.valor_venda = custo * (1 + lucro / 100) * 1.18; // 18% de imposto sobre o custo + lucro
@@ -56,11 +56,11 @@ class Produto {
 	 * Incrementa o total de vendas do produto
 	 *
 	 * @param vendido quantidade vendida
-	 * @throws Exception caso nao haja produtos o suficiente
+	 * @throws IllegalStateException caso nao haja produtos o suficiente
 	 */
-	void baixa(int vendido) throws Exception {
+	void baixa(int vendido) throws IllegalStateException {
 		if (!suficiente(vendido))
-			throw new Exception("\n Erro, nao ha produtos o suficiente");
+			throw new IllegalStateException("\n Estoque insuficiente");
 		this.total_vendas += vendido;
 	}
 

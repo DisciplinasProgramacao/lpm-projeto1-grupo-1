@@ -1,1 +1,5 @@
 desktop.ini
+*.class
+*.jar
+*.zip
+*.tar.gz

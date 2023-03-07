@@ -3,7 +3,7 @@
  *
  * @author Henrique Almeida
  */
-public class Celula {
+class Celula {
 	Produto item;
 	Celula anterior;
 
