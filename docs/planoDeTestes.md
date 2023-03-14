@@ -1,14 +1,43 @@
 # Plano de testes
 
-1. Testa a função Lista.vazia
-  - vazia
-2. Testa a inserção de produtos e lançamento de exceções para produtos inválidos e produtos válidos
-  - inserir
-3. Testa compra e baixa nos produtos, a sufuciência do estoque e o lançamento de exceções para vendas sem estoque. Testando assim funções como Lista.get_produto e Lista.get_celula que buscam referências aos produtos na lista.
-  - compraVendaInsercao
-4. Testa a função Lista.total
-  - quantidadeDeProdutos
-5. Testa a remoção de produtos e lançamento de exceções para produtos não existentes
-  - remocaoDeProdutos
-6. Testa a função Lista.valor_total() e Produto.get_valor_estocado()
-  - valorTotal
+1. Testa o retorno de descrição de produtos
+- testRequisicaoDeDescricao
+
+2. Testa o retorno do valor do estoque de produtos
+- testRequisicaoDeEstoque
+
+3. Testa a função Lista.vazia()
+- testVazia
+
+4. Testa se o lucro mínimo é validado corretamente
+- testaLucroMin
+
+5. Testa se o lucro máximo é validado corretamente
+- testaLucroMax
+
+6. Testa se a descrição tem o tamanho mínimo de caracteres
+- testaDescMin
+
+7. Testa se a inserção de um produto já existente lança uma exceção
+- testaInsercaoDuplicada
+
+8. Testa a inserção de produtos válidos
+- insereProdutos
+
+9. Testa o lançamento de exceção ao tentar vender um produto sem estoque
+- testaVendaSemCompra
+
+10 Testa a venda de um produto com estoque
+- testaCompraVendaDeItemComprado
+
+11. Testa a função Sistema.total()
+- quantidadeDeProdutos
+
+12. Testa o lançamento de exceção ao tentar remover um produto nunca inserido
+- remocaoDeProdutosNaoInserido
+
+12. Testa a remoção de um produto já inserido
+- testaRemocaoDeProdutoExistente
+
+13. Testa se o valor total do estoque é calculado corretamente
+- testaValorTotal
