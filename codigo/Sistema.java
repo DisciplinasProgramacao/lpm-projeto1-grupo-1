@@ -1,172 +1,202 @@
 import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 /**
- * Classe principal do programa de gerenciamento de estoque
+ * Classe que representa uma tablea hash de produtos
  *
- * @author Igor, Lucas
+ * @author Henrique Almeida
  */
-public class Sistema {
-	static int estoque_minimo; // Estoque minimo
+class Sistema {
+	private Produto[] produtos;
 
-	public static void main(String[] args) {
-		Lista produtos = new Lista();
-		Scanner scan = new Scanner(System.in);
-		int escolha = -2;
-		System.out.print("\n Digite o valor minimo do estoque: ");
-		while (true)
-			try {
-				estoque_minimo = Integer.parseInt(scan.nextLine());
-				if (estoque_minimo < 0)
-					throw new NumberFormatException();
-				break;
-			} catch (NumberFormatException e) {
-				System.out.print("\n Erro, digite um numero valido: ");
-			}
-		while (escolha != -1) {
-			System.out.println("\n Digite enter para continuar");
-			scan.nextLine();
-			System.out.println("\n 0 - Inserir produto" + "\n 1 - Baixa" + "\n 2 - Compra"
-					+ "\n 3 - Verificar estoque minimo" + "\n 4 - Total de produtos" + "\n 5 - Remover item"
-					+ "\n 6 - Listar produtos sem estoque" + "\n 7 - Valor total do estoque"
-					+ "\n 8 - Listar um produto" + "\n 9 - Listar todos os produtos"
-					+ "\n 10 - adicionar produtos aleatorios" + "\n -1 - sair");
-			while (true)
-				try {
-					escolha = Integer.parseInt(scan.nextLine());
-					break;
-				} catch (NumberFormatException e) {
-					System.out.print("\n Erro, digite um numero valido: ");
-				}
-			String nome = "";
-			switch (escolha) { // Reduz repeticao no codigo
-				case 0:
-				case 1:
-				case 2:
-				case 3:
-				case 5:
-				case 8:
-					System.out.println("\n Descricao do produto: ");
-					nome = scan.nextLine();
-			}
-			switch (escolha) { // Execucao das escolhas
-				// 0 - inserir produto
-				case 0:
-					try {
-						System.out.println("\n Custo de compra: ");
-						double custo = Double.parseDouble(scan.nextLine());
-						System.out.println("\n Lucro (sem porcentagem): ");
-						double lucro = Double.parseDouble(scan.nextLine());
-						produtos.inserir(new Produto(nome, custo, lucro));
-						System.out.println("\n Produto inserido com sucesso");
-					} catch (NumberFormatException e) {
-						System.out.print("\n Erro, digite um numero valido: ");
-					} catch (IllegalArgumentException e) {
-						System.out.println(e.getMessage());
-					}
-					break;
-				// 1 - baixa de produto
-				case 1:
-					try {
-						System.out.println("\n Quantidade vendida: ");
-						int vendido = Integer.parseInt(scan.nextLine());
-						produtos.baixa(nome, vendido);
-						System.out.println("\n Dados alterados com sucesso");
-					} catch (NumberFormatException e) {
-						System.out.print("\n Erro, digite um numero valido: ");
-					} catch (IllegalStateException e) {
-						System.out.println(e.getMessage());
-					}
-					break;
-				// 2 - compra de produto
-				case 2:
-					try {
-						System.out.println("\n Quantidade comprada: ");
-						int comprado = Integer.parseInt(scan.nextLine());
-						produtos.compra(nome, comprado);
-						System.out.println("\n Dados alterados com sucesso");
-					} catch (NumberFormatException e) {
-						System.out.print("\n Erro, digite um numero valido: ");
-					} catch (NoSuchElementException e) {
-						System.out.println(e.getMessage());
-					}
-					break;
-				// 3 - verificar estoque minimo
-				case 3:
-					try {
-						if (produtos.get_produto(nome).suficiente(estoque_minimo))
-							System.out.println("\n Estoque suficiente");
-						else
-							System.out.println("\n Estoque insuficiente");
-					} catch (NumberFormatException e) {
-						System.out.print("\n Erro, digite um numero valido: ");
-					} catch (NoSuchElementException e) {
-						System.out.println(e.getMessage());
-					}
-					break;
-				// 4 - total de produtos
-				case 4:
-					System.out.println("\n Total de produtos: " + produtos.total());
-					break;
-				// 5 - remover produto
-				case 5:
-					try {
-						System.out.println("\n Produto \"" + produtos.remover(nome) + "\" removido com sucesso");
-					} catch (NoSuchElementException e) {
-						System.out.println(e.getMessage());
-					}
-					break;
-				// 6 - produtos abaixo do estoque minimo
-				case 6:
-					if (produtos.vazia())
-						System.out.println("\n Nenhum produto cadastrado");
-					else
-						produtos.listar_nminimo();
-					break;
-				// 7 - valor total do estoque
-				case 7:
-					System.out.println("\n Valor total do estoque: " + produtos.valor_total());
-					break;
-				// 8 - listar produto
-				case 8:
-					try {
-						produtos.listar_produto(nome);
-					} catch (NoSuchElementException e) {
-						System.out.println(e.getMessage());
-					}
-					break;
-				// 9 - listar geral
-				case 9:
-					if (produtos.vazia())
-						System.out.println("\n Nenhum produto cadastrado");
-					else
-						produtos.listar_geral();
-					break;
-				// 10 - adicionar produtos aleatorios
-				case 10: // lucro minimo 30%, maximo 80%
-					Produto arr[] = { new Produto("feijao", 10, 50), new Produto("arroz", 8, 40),
-							new Produto("macarrao", 5, 30), new Produto("carne", 20, 60), new Produto("frango", 15, 50),
-							new Produto("queijo", 9.99, 30), new Produto("leite", 5.30, 40),
-							new Produto("manteiga", 7.99, 30), new Produto("azeite", 15, 50),
-							new Produto("sal", 2.25, 30), new Produto("pimenta", 2.99, 30),
-							new Produto("alho", 3.99, 30), new Produto("cebola", 4.99, 30),
-							new Produto("tomate", 3.39, 30), new Produto("alface", 2.99, 30),
-							new Produto("batata", 2.9, 30), new Produto("cenoura", 2.50, 30),
-							new Produto("abobora", 2.99, 30), new Produto("maca", 2.99, 30),
-							new Produto("banana", 2.99, 30), new Produto("laranja", 2.99, 30),
-							new Produto("uva", 2.99, 30), new Produto("cafe", 2.99, 30),
-							new Produto("chocolate", 2.99, 30), new Produto("biscoito", 2.99, 30),
-							new Produto("bolacha", 2.99, 30), new Produto("pao", 2.99, 30), new Produto("sabao", 2.99, 30) };
-					for (Produto a : arr)
-						produtos.inserir(a);
-					System.out.println("\n Produtos adicionados com sucesso");
-					break;
-				// -1 - sair
-				case -1:
-					System.out.println("\n Saindo...");
-			}
+	/**
+	 * Construtor da classe que cria um array de produtos
+	 * 
+	 * @param tamanho tamanho da tabela hash
+	 */
+	Sistema(int tamanho) {
+		this.produtos = new Produto[tamanho];
+	}
+
+	/**
+	 * Funcao hash para encontrar o index do produto no array, usada em
+	 * {@link Sistema#get_produto(String)}, {@link Sistema#cadastrar(Produto)} e
+	 * {@link Sistema#remover(String)}
+	 * 
+	 * @param in descricao do produto
+	 * @return index do produto na tabela hash
+	 */
+	private int hash(String in) {
+		int out = 0;
+		for (int i = 0; i < in.length(); i++)
+			out = (out * 7 + in.charAt(i)) % this.produtos.length;
+		return out;
+	}
+
+	/**
+	 * @param in descricao do produto
+	 * @return o produto com a descricao dada
+	 * @throws NoSuchElementException caso o produto nao seja encontrado
+	 */
+	Produto get_produto(String in) throws NoSuchElementException {
+		int index = hash(in), i = 0; // funcao hash e contador
+		while (this.produtos[index] != null && !this.produtos[index].get_desc().equals(in)
+				&& i < this.produtos.length) {
+			index = (index + 1) % this.produtos.length;
+			i++;
 		}
-		scan.close();
+		if (this.produtos[index] == null || i == this.produtos.length) // nao existe
+			throw new NoSuchElementException("\n Este produto nao esta cadastrado");
+		return this.produtos[index]; // sucesso
+	}
+
+	/**
+	 * Insere um novo produto na tabela hash
+	 *
+	 * @param novo_item nome do novo produto
+	 * @throws IllegalArgumentException       caso o produto ja exista
+	 * @throws ArrayIndexOutOfBoundsException caso a tabela esteja cheia
+	 */
+	void cadastrar(Produto novo_item) throws IllegalArgumentException, ArrayIndexOutOfBoundsException {
+		int index = hash(novo_item.get_desc()), i = 0; // funcao hash e contador
+		while (this.produtos[index] != null && !this.produtos[index].get_desc().equals(novo_item.get_desc())
+				&& i < this.produtos.length) {
+			index = (index + 1) % this.produtos.length;
+			i++;
+		}
+		if (this.produtos[index] != null) // ja existe
+			throw new IllegalArgumentException("\n Produto" + this.produtos[index].get_desc() + " ja cadastrado");
+		if (i == this.produtos.length) // tabela cheia
+			throw new ArrayIndexOutOfBoundsException("\n Tabela cheia, remova um produto antes de cadastrar um novo");
+		this.produtos[index] = novo_item; // sucesso
+	}
+
+	/**
+	 * Remove um produto da tabela hash e reorganiza elementos que anteriormente
+	 * colidiram
+	 *
+	 * @param in nome do produto
+	 * @throws NoSuchElementException caso o produto nao seja encontrado
+	 */
+	String remover(String in) throws NoSuchElementException {
+		int index = hash(in), i = 0; // funcao hash e contador
+		while (this.produtos[index] != null && !this.produtos[index].get_desc().equals(in)
+				&& i < this.produtos.length) {
+			index = (index + 1) % this.produtos.length;
+			i++;
+		}
+		if (this.produtos[index] == null || i == this.produtos.length) // nao existe
+			throw new NoSuchElementException("\n Este produto nao esta cadastrado");
+		String out = this.produtos[index].get_desc(); // nome do produto removido
+		this.produtos[index] = null;
+		// reorganiza a tabela
+		index = (index + 1) % this.produtos.length; // proximo elemento
+		while (this.produtos[index] != null) { // reorganiza
+			Produto temp = this.produtos[index];
+			this.produtos[index] = null;
+			cadastrar(temp);
+			index = (index + 1) % this.produtos.length;
+		}
+		return out;
+	}
+
+	/**
+	 * Incrementa o total de vendas do produto
+	 *
+	 * @param in nome do produto
+	 * @throws NoSuchElementException caso o produto nao seja encontrado
+	 * @throws IllegalStateException  caso nao haja produtos o suficiente
+	 */
+	void baixa(String in, int vendido) throws NoSuchElementException, IllegalStateException {
+		get_produto(in).baixa(vendido);
+	}
+
+	/**
+	 * Incrementa o total de compras do produto
+	 *
+	 * @param in nome do produto
+	 * @throws NoSuchElementException caso o produto nao seja encontrado
+	 */
+	void compra(String in, int comprado) throws NoSuchElementException {
+		get_produto(in).compra(comprado);
+	}
+
+	/**
+	 * Realiza as compras de todos os produtos abaixo do minimo
+	 * 
+	 * @return o total de produtos comprados
+	 */
+	int repor_estoque() {
+		int out = 0;
+		for (Produto p : this.produtos)
+			if (p != null)
+				out += p.compra_minima();
+		return out;
+	}
+
+	/**
+	 * lista o produto com a descricao dada
+	 */
+	void listar_produto(String nome) {
+		get_produto(nome).print_produto();
+	}
+
+	/**
+	 * lista todos os produtos cadastrados
+	 */
+	void listar_geral() {
+		int i = 0;
+		for (Produto p : this.produtos)
+			if (p != null) {
+				System.out.print("\n" + i++ + " -");
+				p.print_produto();
+			}
+	}
+
+	/**
+	 * @return true se nao ha produtos cadastrados, false caso contrario
+	 */
+	boolean vazia() {
+		for (Produto p : this.produtos)
+			if (p != null)
+				return false;
+		return true;
+	}
+
+	/**
+	 * @return total de produtos cadastrados
+	 */
+	int total() {
+		int total = 0;
+		for (Produto p : this.produtos)
+			if (p != null)
+				total++;
+		return total;
+	}
+
+	/**
+	 * @return valor total do estoque
+	 */
+	double valor_total() {
+		double total = 0;
+		for (Produto p : this.produtos)
+			if (p != null)
+				total += p.get_estoque();
+		return total;
+	}
+
+	/**
+	 * lista todos os produtos abaixo do minimo
+	 * 
+	 * @return o total de produtos abaixo do minimo
+	 */
+	int listar_nminimo() {
+		int out = 0;
+		for (Produto p : this.produtos)
+			if (p != null && !p.suficiente()) {
+				p.print_produto();
+				out++;
+			}
+		return out;
 	}
 
 }
